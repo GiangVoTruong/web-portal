@@ -1,0 +1,23 @@
+# Các thư mục build
+dist
+build
+coverage
+
+# Các thư mục phụ thuộc
+node_modules
+
+# Các tệp cấu hình
+pnpm-lock.yaml
+
+# Các tệp tĩnh
+*.svg
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.ico
+
+# Các tệp khác
+.DS_Store
+.env
+.env.*
