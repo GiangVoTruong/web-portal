@@ -1,7 +1,75 @@
 {
-  "files": [],
+  "compilerOptions": {
+    // Phiên bản JavaScript đích mà TypeScript sẽ biên dịch thành
+    "target": "ES2020",
+
+    // Sử dụng 'define' thay vì 'Object.defineProperty' cho các trường lớp
+    "useDefineForClassFields": true,
+
+    // Các thư viện được sử dụng - bao gồm DOM và các API ES2020
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+
+    // Hệ thống module - sử dụng ESNext cho import/export
+    "module": "ESNext",
+
+    // Bỏ qua kiểm tra thư viện để tăng tốc độ biên dịch
+    "skipLibCheck": true,
+
+    // Chiến lược phân giải module - sử dụng 'bundler' cho Vite
+    "moduleResolution": "bundler",
+
+    // Cho phép import trực tiếp các file .ts/.tsx
+    "allowImportingTsExtensions": true,
+
+    // Cho phép import các file JSON như là module
+    "resolveJsonModule": true,
+
+    // Đảm bảo mỗi file là một module độc lập
+    "isolatedModules": true,
+
+    // Không tạo ra các file JavaScript output - Vite sẽ xử lý việc này
+    "noEmit": true,
+
+    // Hỗ trợ cú pháp JSX của React
+    "jsx": "react-jsx",
+
+    // Bật kiểm tra kiểu dữ liệu nghiêm ngặt
+    "strict": true,
+
+    // Báo lỗi khi có biến cục bộ không được sử dụng
+    "noUnusedLocals": true,
+
+    // Báo lỗi khi có tham số hàm không được sử dụng
+    "noUnusedParameters": true,
+
+    // Báo lỗi khi switch không có break/return
+    "noFallthroughCasesInSwitch": true,
+
+    // Đường dẫn gốc cho việc phân giải module
+    "baseUrl": ".",
+
+    // Cấu hình alias cho đường dẫn import
+    "paths": {
+      "@/*": ["src/*"] // @ sẽ trỏ đến thư mục src
+    },
+
+    // Đảm bảo tính nhất quán về viết hoa/thường trong tên file
+    "forceConsistentCasingInFileNames": true,
+
+    // Cho phép tương tác giữa module CommonJS và ES
+    "esModuleInterop": true
+  },
+
+  // Bao gồm tất cả các file trong thư mục src
+  "include": ["src"],
+
+  // Tham chiếu đến file cấu hình TypeScript cho Node.js
   "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.node.json"
+    }
   ]
 }

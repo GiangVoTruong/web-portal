@@ -1,23 +1,35 @@
-# Các thư mục build
+# Các tệp và thư mục được tạo ra khi build - bỏ qua định dạng
 dist
+dist-ssr
 build
 coverage
 
-# Các thư mục phụ thuộc
+# Thư mục và tệp phụ thuộc - bỏ qua định dạng
 node_modules
+.pnp
+.pnp.js
 
-# Các tệp cấu hình
+# Tệp nhật ký - bỏ qua định dạng
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Các tệp được tạo tự động - bỏ qua định dạng
+*.local
+*.tsbuildinfo
+next-env.d.ts
+
+# Tệp khóa phụ thuộc - bỏ qua định dạng để tránh xung đột
+package-lock.json
+yarn.lock
 pnpm-lock.yaml
 
-# Các tệp tĩnh
-*.svg
-*.png
-*.jpg
-*.jpeg
-*.gif
-*.ico
-
-# Các tệp khác
+# Các tệp khác cần bỏ qua định dạng
 .DS_Store
-.env
-.env.*
+.cache
+.env*
+!.env.example
