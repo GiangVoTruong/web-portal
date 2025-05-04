@@ -32,6 +32,7 @@ const PublicHeader: React.FC = () => {
   const [showMobileMenu, setShowMobileMenu] = useState<boolean>(false)
   const [isScrolled, setIsScrolled] = useState<boolean>(false)
   const [showNotifications, setShowNotifications] = useState<boolean>(false)
+  const [activeTab, setActiveTab] = useState<'promotion' | 'order'>('promotion')
   const headerRef = useRef<HTMLDivElement>(null)
   const notificationRef = useRef<HTMLDivElement>(null)
   const cartItemCount = 2
@@ -60,7 +61,7 @@ const PublicHeader: React.FC = () => {
     },
     {
       id: '3',
-      type: 'system',
+      type: 'order',
       title: 'Xác nhận đơn hàng',
       message: 'Đơn hàng #123455 đã được xác nhận thành công.',
       time: '2 giờ trước',
@@ -78,9 +79,40 @@ const PublicHeader: React.FC = () => {
       icon: faGift,
       color: 'text-purple-500',
     },
+    {
+      id: '5',
+      type: 'order',
+      title: 'Đặt hàng thành công',
+      message: 'Đơn hàng #123457 đã được đặt thành công.',
+      time: '3 giờ trước',
+      read: false,
+      icon: faCheckCircle,
+      color: 'text-green-500',
+    },
+    {
+      id: '6',
+      type: 'promotion',
+      title: 'Flash Sale 12.12',
+      message: 'Giảm giá đến 70% cho hàng ngàn sản phẩm!',
+      time: '2 giờ trước',
+      read: false,
+      icon: faPercentage,
+      color: 'text-orange-500',
+    },
   ])
 
-  const unreadCount = notifications.filter(n => !n.read).length
+  const promotionNotifications = notifications.filter(
+    n => n.type === 'promotion'
+  )
+  const orderNotifications = notifications.filter(n => n.type === 'order')
+  const currentNotifications =
+    activeTab === 'promotion' ? promotionNotifications : orderNotifications
+
+  const unreadPromotionCount = promotionNotifications.filter(
+    n => !n.read
+  ).length
+  const unreadOrderCount = orderNotifications.filter(n => !n.read).length
+  const totalUnreadCount = unreadPromotionCount + unreadOrderCount
 
   useEffect(() => {
     const handleScroll = () => {
@@ -124,7 +156,9 @@ const PublicHeader: React.FC = () => {
   }
 
   const markAllAsRead = (): void => {
-    setNotifications(notifications.map(n => ({ ...n, read: true })))
+    setNotifications(
+      notifications.map(n => (n.type === activeTab ? { ...n, read: true } : n))
+    )
   }
 
   const markAsRead = (id: string): void => {
@@ -206,47 +240,90 @@ const PublicHeader: React.FC = () => {
                   icon={faBell}
                   className="text-gray-700 text-lg"
                 />
-                {unreadCount > 0 && (
+                {totalUnreadCount > 0 && (
                   <span className="absolute -top-1 -right-1 bg-red-500 text-white w-5 h-5 flex items-center justify-center rounded-full text-xs animate-pulse">
-                    {unreadCount}
+                    {totalUnreadCount}
                   </span>
                 )}
               </button>
 
               {/* Notifications Dropdown */}
               {showNotifications && (
-                <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
-                  <div className="p-4 border-b border-gray-200 flex justify-between items-center">
-                    <h3 className="font-semibold text-gray-800">Thông báo</h3>
-                    {unreadCount > 0 && (
+                <div className="absolute right-0 mt-2 w-96 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+                  {/* Tabs */}
+                  <div className="flex border-b border-gray-200">
+                    <button
+                      onClick={() => setActiveTab('promotion')}
+                      className={`flex-1 py-3 px-4 text-sm font-medium relative ${
+                        activeTab === 'promotion'
+                          ? 'text-blue-600 border-b-2 border-blue-600'
+                          : 'text-gray-500 hover:text-gray-700'
+                      }`}
+                    >
+                      Khuyến mãi
+                      {unreadPromotionCount > 0 && (
+                        <span className="ml-2 inline-flex items-center justify-center px-2 py-0.5 text-xs font-medium text-white bg-red-500 rounded-full">
+                          {unreadPromotionCount}
+                        </span>
+                      )}
+                    </button>
+                    <button
+                      onClick={() => setActiveTab('order')}
+                      className={`flex-1 py-3 px-4 text-sm font-medium relative ${
+                        activeTab === 'order'
+                          ? 'text-blue-600 border-b-2 border-blue-600'
+                          : 'text-gray-500 hover:text-gray-700'
+                      }`}
+                    >
+                      Đơn hàng
+                      {unreadOrderCount > 0 && (
+                        <span className="ml-2 inline-flex items-center justify-center px-2 py-0.5 text-xs font-medium text-white bg-red-500 rounded-full">
+                          {unreadOrderCount}
+                        </span>
+                      )}
+                    </button>
+                  </div>
+
+                  {/* Header with mark all as read */}
+                  <div className="px-4 py-2 border-b border-gray-100 flex justify-between items-center">
+                    <h3 className="text-sm font-medium text-gray-700">
+                      {activeTab === 'promotion'
+                        ? 'Thông báo khuyến mãi'
+                        : 'Thông báo đơn hàng'}
+                    </h3>
+                    {currentNotifications.some(n => !n.read) && (
                       <button
                         onClick={markAllAsRead}
-                        className="text-sm text-blue-500 hover:text-blue-600"
+                        className="text-xs text-blue-500 hover:text-blue-600"
                       >
                         Đánh dấu tất cả đã đọc
                       </button>
                     )}
                   </div>
 
+                  {/* Notifications list */}
                   <div className="max-h-96 overflow-y-auto">
-                    {notifications.length > 0 ? (
-                      notifications.map(notification => (
+                    {currentNotifications.length > 0 ? (
+                      currentNotifications.map(notification => (
                         <div
                           key={notification.id}
-                          className={`p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer ${
+                          className={`p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors ${
                             !notification.read ? 'bg-blue-50' : ''
                           }`}
                           onClick={() => markAsRead(notification.id)}
                         >
                           <div className="flex items-start">
                             <div className={`mr-3 mt-1 ${notification.color}`}>
-                              <FontAwesomeIcon icon={notification.icon} />
+                              <FontAwesomeIcon
+                                icon={notification.icon}
+                                className="w-5 h-5"
+                              />
                             </div>
-                            <div className="flex-1">
-                              <h4 className="font-medium text-gray-800">
+                            <div className="flex-1 min-w-0">
+                              <h4 className="font-medium text-gray-900 text-sm">
                                 {notification.title}
                               </h4>
-                              <p className="text-sm text-gray-600 mt-1">
+                              <p className="text-sm text-gray-600 mt-1 line-clamp-2">
                                 {notification.message}
                               </p>
                               <p className="text-xs text-gray-400 mt-1">
@@ -254,24 +331,40 @@ const PublicHeader: React.FC = () => {
                               </p>
                             </div>
                             {!notification.read && (
-                              <div className="w-2 h-2 bg-blue-500 rounded-full ml-2"></div>
+                              <div className="w-2 h-2 bg-blue-500 rounded-full ml-2 flex-shrink-0"></div>
                             )}
                           </div>
                         </div>
                       ))
                     ) : (
-                      <div className="p-4 text-center text-gray-500">
-                        Không có thông báo mới
+                      <div className="p-8 text-center">
+                        <div className="text-gray-400 mb-2">
+                          <FontAwesomeIcon
+                            icon={
+                              activeTab === 'promotion'
+                                ? faGift
+                                : faShippingFast
+                            }
+                            className="text-3xl"
+                          />
+                        </div>
+                        <p className="text-gray-500 text-sm">
+                          {activeTab === 'promotion'
+                            ? 'Không có thông báo khuyến mãi mới'
+                            : 'Không có thông báo đơn hàng mới'}
+                        </p>
                       </div>
                     )}
                   </div>
 
+                  {/* Footer */}
                   <div className="p-2 border-t border-gray-200">
                     <Link
-                      to="/notifications"
-                      className="block text-center text-sm text-blue-500 hover:text-blue-600 py-2"
+                      to={`/notifications?tab=${activeTab}`}
+                      className="block text-center text-sm text-blue-500 hover:text-blue-600 py-2 hover:bg-gray-50 rounded transition-colors"
                     >
-                      Xem tất cả thông báo
+                      Xem tất cả thông báo{' '}
+                      {activeTab === 'promotion' ? 'khuyến mãi' : 'đơn hàng'}
                     </Link>
                   </div>
                 </div>
@@ -488,9 +581,9 @@ const PublicHeader: React.FC = () => {
               >
                 <FontAwesomeIcon icon={faBell} className="text-lg mb-1" />
                 <span className="text-sm">Thông báo</span>
-                {unreadCount > 0 && (
+                {totalUnreadCount > 0 && (
                   <span className="absolute -top-1 right-1 bg-red-500 text-white w-4 h-4 flex items-center justify-center rounded-full text-xs">
-                    {unreadCount}
+                    {totalUnreadCount}
                   </span>
                 )}
               </div>

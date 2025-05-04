@@ -353,12 +353,32 @@ const Profile: React.FC = () => {
 }
 
 // Enhanced Orders component
+// Enhanced Orders component with proper types
 const Orders: React.FC = () => {
   const [activeTab, setActiveTab] = useState('all')
   const [selectedOrder, setSelectedOrder] = useState<any>(null)
   const [detailVisible, setDetailVisible] = useState(false)
 
-  const orders = [
+  // Define proper types
+  interface Product {
+    name: string
+    quantity: number
+    price: number
+  }
+
+  interface Order {
+    id: string
+    date: string
+    status: string
+    statusText: string
+    total: number
+    items: number
+    payment: string
+    shipping: string
+    products: Product[]
+  }
+
+  const orders: Order[] = [
     {
       id: 'ORDER-123456',
       date: '01/05/2023',
@@ -443,7 +463,7 @@ const Orders: React.FC = () => {
     }
   }
 
-  const handleViewDetail = (order: any) => {
+  const handleViewDetail = (order: Order) => {
     setSelectedOrder(order)
     setDetailVisible(true)
   }
@@ -456,7 +476,7 @@ const Orders: React.FC = () => {
       render: (id: string) => (
         <Button
           type="link"
-          onClick={() => handleViewDetail(orders.find(o => o.id === id))}
+          onClick={() => handleViewDetail(orders.find(o => o.id === id)!)}
         >
           {id}
         </Button>
@@ -483,7 +503,7 @@ const Orders: React.FC = () => {
       title: 'Trạng thái',
       dataIndex: 'status',
       key: 'status',
-      render: (status: string, record: any) => (
+      render: (status: string, record: Order) => (
         <Tag icon={getStatusIcon(status)} color={getStatusColor(status)}>
           {record.statusText}
         </Tag>
@@ -492,7 +512,7 @@ const Orders: React.FC = () => {
     {
       title: 'Thao tác',
       key: 'action',
-      render: (_: any, record: any) => (
+      render: (_: any, record: Order) => (
         <Space>
           <Button
             type="link"
@@ -513,6 +533,31 @@ const Orders: React.FC = () => {
           )}
         </Space>
       ),
+    },
+  ]
+
+  const productColumns = [
+    {
+      title: 'Sản phẩm',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: 'Số lượng',
+      dataIndex: 'quantity',
+      key: 'quantity',
+    },
+    {
+      title: 'Đơn giá',
+      dataIndex: 'price',
+      key: 'price',
+      render: (price: number) => formatPrice(price),
+    },
+    {
+      title: 'Thành tiền',
+      key: 'total',
+      render: (_: any, record: Product) =>
+        formatPrice(record.price * record.quantity),
     },
   ]
 
@@ -601,22 +646,7 @@ const Orders: React.FC = () => {
 
             <Table
               dataSource={selectedOrder.products}
-              columns={[
-                { title: 'Sản phẩm', dataIndex: 'name', key: 'name' },
-                { title: 'Số lượng', dataIndex: 'quantity', key: 'quantity' },
-                {
-                  title: 'Đơn giá',
-                  dataIndex: 'price',
-                  key: 'price',
-                  render: formatPrice,
-                },
-                {
-                  title: 'Thành tiền',
-                  key: 'total',
-                  render: (_, record) =>
-                    formatPrice(record.price * record.quantity),
-                },
-              ]}
+              columns={productColumns}
               pagination={false}
               rowKey="name"
             />
