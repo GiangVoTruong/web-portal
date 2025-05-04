@@ -1,95 +1,409 @@
 import {
+  BellOutlined,
+  CalendarOutlined,
+  CameraOutlined,
+  CheckCircleOutlined,
+  ClockCircleOutlined,
+  CloseCircleOutlined,
+  DeleteOutlined,
+  DownloadOutlined,
+  EditOutlined,
   EnvironmentOutlined,
+  ExclamationCircleOutlined,
+  EyeOutlined,
+  GiftOutlined,
+  HeartFilled,
   HeartOutlined,
+  HistoryOutlined,
   HomeOutlined,
   LockOutlined,
   LogoutOutlined,
+  MailOutlined,
+  MessageOutlined,
+  PhoneOutlined,
+  PlusCircleOutlined,
+  PlusOutlined,
+  PrinterOutlined,
+  QuestionCircleOutlined,
+  SafetyCertificateOutlined,
+  SafetyOutlined,
+  SettingOutlined,
+  ShopOutlined,
+  ShoppingCartOutlined,
   ShoppingOutlined,
+  StarOutlined,
+  SyncOutlined,
+  TruckOutlined,
   UserOutlined,
+  WalletOutlined,
 } from '@ant-design/icons'
 import {
+  Alert,
   Avatar,
+  Badge,
   Breadcrumb,
   Button,
+  Card,
+  Checkbox,
+  Col,
+  Collapse,
+  DatePicker,
   Descriptions,
   Divider,
+  Empty,
   Form,
+  Grid,
   Input,
+  List,
   Menu,
+  message,
+  Modal,
+  Radio,
+  Rate,
+  Row,
+  Select,
+  Space,
+  Statistic,
+  Steps,
+  Switch,
   Table,
+  Tabs,
   Tag,
+  Typography,
+  Upload,
 } from 'antd'
-import { useEffect, useState } from 'react'
-import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Link, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 
-// Profile component
+const { Title, Text, Paragraph } = Typography
+const { TabPane } = Tabs
+const { Panel } = Collapse
+const { Option } = Select
+const { Step } = Steps
+const { useBreakpoint } = Grid
+
+// Enhanced Profile component
 const Profile: React.FC = () => {
+  const [editModalVisible, setEditModalVisible] = useState(false)
+  const [uploading, setUploading] = useState(false)
+  const [form] = Form.useForm()
+
+  const userInfo = {
+    name: 'Nguyễn Văn A',
+    email: 'nguyenvana@example.com',
+    phone: '0123456789',
+    gender: 'Nam',
+    birthday: '01/01/1990',
+    address: '123 Nguyễn Huệ, Quận 1, TP.HCM',
+    joinDate: '01/01/2020',
+    level: 'VIP',
+    points: 1250,
+    orders: 45,
+    spent: 25680000,
+  }
+
+  const handleUpload = () => {
+    setUploading(true)
+    setTimeout(() => {
+      setUploading(false)
+      message.success('Cập nhật ảnh đại diện thành công!')
+    }, 1500)
+  }
+
+  const handleEdit = () => {
+    form.setFieldsValue(userInfo)
+    setEditModalVisible(true)
+  }
+
+  const handleSave = (values: any) => {
+    console.log('Saving:', values)
+    message.success('Cập nhật thông tin thành công!')
+    setEditModalVisible(false)
+  }
+
   return (
     <div>
-      <h2 className="text-xl font-bold mb-6">Thông tin tài khoản</h2>
-      <div className="bg-white p-6 rounded-lg shadow-sm">
-        <div className="flex flex-col sm:flex-row items-center sm:items-start mb-6">
-          <Avatar
-            size={80}
-            icon={<UserOutlined />}
-            className="mb-4 sm:mb-0 sm:mr-6"
-          />
-          <div>
-            <h3 className="text-lg font-medium">Nguyễn Văn A</h3>
-            <p className="text-gray-500">nguyenvana@example.com</p>
-            <p className="text-gray-500">0123456789</p>
-          </div>
-        </div>
-        <Divider />
-        <Descriptions title="Chi tiết tài khoản" layout="vertical" bordered>
-          <Descriptions.Item label="Họ tên" span={3}>
-            Nguyễn Văn A
-          </Descriptions.Item>
-          <Descriptions.Item label="Email" span={3}>
-            nguyenvana@example.com
-          </Descriptions.Item>
-          <Descriptions.Item label="Số điện thoại" span={3}>
-            0123456789
-          </Descriptions.Item>
-          <Descriptions.Item label="Giới tính" span={3}>
-            Nam
-          </Descriptions.Item>
-          <Descriptions.Item label="Ngày sinh" span={3}>
-            01/01/1990
-          </Descriptions.Item>
-        </Descriptions>
-        <div className="mt-6">
-          <Button type="primary">Cập nhật thông tin</Button>
-        </div>
-      </div>
+      <Card className="mb-6">
+        <Row gutter={24}>
+          <Col xs={24} md={8} className="text-center">
+            <div className="relative inline-block mb-4">
+              <Avatar
+                size={120}
+                icon={<UserOutlined />}
+                src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"
+                className="border-4 border-white shadow-lg"
+              />
+              <Upload
+                showUploadList={false}
+                beforeUpload={() => false}
+                onChange={handleUpload}
+              >
+                <Button
+                  icon={<CameraOutlined />}
+                  shape="circle"
+                  size="small"
+                  className="absolute bottom-0 right-0 shadow-lg"
+                  loading={uploading}
+                />
+              </Upload>
+            </div>
+            <Title level={4} className="mb-1">
+              {userInfo.name}
+            </Title>
+            <Tag color="gold" className="mb-2">
+              <StarOutlined /> {userInfo.level}
+            </Tag>
+            <div className="mb-4">
+              <Text className="block text-gray-500">{userInfo.email}</Text>
+              <Text className="block text-gray-500">{userInfo.phone}</Text>
+            </div>
+            <Button
+              type="primary"
+              icon={<EditOutlined />}
+              onClick={handleEdit}
+              block
+            >
+              Chỉnh sửa thông tin
+            </Button>
+          </Col>
+          <Col xs={24} md={16}>
+            <Title level={5} className="mb-4">
+              Thông tin cá nhân
+            </Title>
+            <Row gutter={[16, 16]}>
+              <Col xs={24} sm={12}>
+                <Card size="small" className="bg-gray-50">
+                  <Statistic
+                    title="Điểm tích lũy"
+                    value={userInfo.points}
+                    prefix={<StarOutlined />}
+                    suffix="điểm"
+                  />
+                </Card>
+              </Col>
+              <Col xs={24} sm={12}>
+                <Card size="small" className="bg-gray-50">
+                  <Statistic
+                    title="Tổng đơn hàng"
+                    value={userInfo.orders}
+                    prefix={<ShoppingCartOutlined />}
+                    suffix="đơn"
+                  />
+                </Card>
+              </Col>
+              <Col xs={24} sm={12}>
+                <Card size="small" className="bg-gray-50">
+                  <Statistic
+                    title="Tổng chi tiêu"
+                    value={userInfo.spent}
+                    prefix={<WalletOutlined />}
+                    formatter={value =>
+                      new Intl.NumberFormat('vi-VN', {
+                        style: 'currency',
+                        currency: 'VND',
+                      }).format(value as number)
+                    }
+                  />
+                </Card>
+              </Col>
+              <Col xs={24} sm={12}>
+                <Card size="small" className="bg-gray-50">
+                  <Statistic
+                    title="Ngày tham gia"
+                    value={userInfo.joinDate}
+                    prefix={<CalendarOutlined />}
+                  />
+                </Card>
+              </Col>
+            </Row>
+            <Divider />
+            <Descriptions title="Chi tiết thông tin" column={{ xs: 1, sm: 2 }}>
+              <Descriptions.Item label="Họ tên">
+                {userInfo.name}
+              </Descriptions.Item>
+              <Descriptions.Item label="Email">
+                {userInfo.email}
+              </Descriptions.Item>
+              <Descriptions.Item label="Số điện thoại">
+                {userInfo.phone}
+              </Descriptions.Item>
+              <Descriptions.Item label="Giới tính">
+                {userInfo.gender}
+              </Descriptions.Item>
+              <Descriptions.Item label="Ngày sinh">
+                {userInfo.birthday}
+              </Descriptions.Item>
+              <Descriptions.Item label="Địa chỉ">
+                {userInfo.address}
+              </Descriptions.Item>
+            </Descriptions>
+          </Col>
+        </Row>
+      </Card>
+
+      {/* Security Settings */}
+      <Card
+        title={
+          <Space>
+            <SafetyCertificateOutlined />
+            Bảo mật tài khoản
+          </Space>
+        }
+        className="mb-6"
+      >
+        <List>
+          <List.Item actions={[<Button type="link">Thay đổi</Button>]}>
+            <List.Item.Meta
+              avatar={<LockOutlined className="text-xl text-blue-500" />}
+              title="Mật khẩu"
+              description="Lần thay đổi gần nhất: 3 tháng trước"
+            />
+          </List.Item>
+          <List.Item actions={[<Switch defaultChecked />]}>
+            <List.Item.Meta
+              avatar={<SafetyOutlined className="text-xl text-green-500" />}
+              title="Xác thực 2 bước"
+              description="Bảo vệ tài khoản với xác thực 2 bước"
+            />
+          </List.Item>
+          <List.Item actions={[<Button type="link">Quản lý</Button>]}>
+            <List.Item.Meta
+              avatar={<HistoryOutlined className="text-xl text-orange-500" />}
+              title="Lịch sử đăng nhập"
+              description="Xem các phiên đăng nhập gần đây"
+            />
+          </List.Item>
+        </List>
+      </Card>
+
+      {/* Edit Modal */}
+      <Modal
+        title="Chỉnh sửa thông tin cá nhân"
+        open={editModalVisible}
+        onCancel={() => setEditModalVisible(false)}
+        footer={null}
+        width={600}
+      >
+        <Form form={form} layout="vertical" onFinish={handleSave}>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                name="name"
+                label="Họ tên"
+                rules={[{ required: true, message: 'Vui lòng nhập họ tên' }]}
+              >
+                <Input prefix={<UserOutlined />} />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="phone"
+                label="Số điện thoại"
+                rules={[
+                  { required: true, message: 'Vui lòng nhập số điện thoại' },
+                ]}
+              >
+                <Input prefix={<PhoneOutlined />} />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="email"
+                label="Email"
+                rules={[
+                  { required: true, message: 'Vui lòng nhập email' },
+                  { type: 'email', message: 'Email không hợp lệ' },
+                ]}
+              >
+                <Input prefix={<MailOutlined />} />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item name="birthday" label="Ngày sinh">
+                <DatePicker style={{ width: '100%' }} format="DD/MM/YYYY" />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item name="gender" label="Giới tính">
+                <Radio.Group>
+                  <Radio value="Nam">Nam</Radio>
+                  <Radio value="Nữ">Nữ</Radio>
+                  <Radio value="Khác">Khác</Radio>
+                </Radio.Group>
+              </Form.Item>
+            </Col>
+            <Col span={24}>
+              <Form.Item name="address" label="Địa chỉ">
+                <Input.TextArea rows={2} />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Form.Item className="mb-0 text-right">
+            <Space>
+              <Button onClick={() => setEditModalVisible(false)}>Hủy</Button>
+              <Button type="primary" htmlType="submit">
+                Lưu thay đổi
+              </Button>
+            </Space>
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   )
 }
 
-// Orders component
+// Enhanced Orders component
 const Orders: React.FC = () => {
+  const [activeTab, setActiveTab] = useState('all')
+  const [selectedOrder, setSelectedOrder] = useState<any>(null)
+  const [detailVisible, setDetailVisible] = useState(false)
+
   const orders = [
     {
       id: 'ORDER-123456',
       date: '01/05/2023',
-      status: 'Đã giao',
+      status: 'delivered',
+      statusText: 'Đã giao',
       total: 4898000,
       items: 2,
+      payment: 'VISA ****1234',
+      shipping: 'Giao hàng nhanh',
+      products: [
+        { name: 'iPhone 15 Pro Max', quantity: 1, price: 2999000 },
+        { name: 'AirPods Pro 2', quantity: 1, price: 1899000 },
+      ],
     },
     {
       id: 'ORDER-123457',
       date: '15/04/2023',
-      status: 'Đang giao',
+      status: 'shipping',
+      statusText: 'Đang giao',
       total: 2999000,
       items: 1,
+      payment: 'COD',
+      shipping: 'Giao hàng tiêu chuẩn',
+      products: [{ name: 'MacBook Air M2', quantity: 1, price: 2999000 }],
     },
     {
       id: 'ORDER-123458',
       date: '30/03/2023',
-      status: 'Đã hủy',
+      status: 'cancelled',
+      statusText: 'Đã hủy',
       total: 1899000,
       items: 1,
+      payment: 'Momo',
+      shipping: 'Giao hàng nhanh',
+      products: [{ name: 'iPad Air 5', quantity: 1, price: 1899000 }],
     },
+  ]
+
+  const statusFilters = [
+    { key: 'all', label: 'Tất cả' },
+    { key: 'pending', label: 'Chờ xác nhận' },
+    { key: 'confirmed', label: 'Đã xác nhận' },
+    { key: 'shipping', label: 'Đang giao' },
+    { key: 'delivered', label: 'Đã giao' },
+    { key: 'cancelled', label: 'Đã hủy' },
   ]
 
   const formatPrice = (price: number) => {
@@ -99,12 +413,54 @@ const Orders: React.FC = () => {
     }).format(price)
   }
 
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'delivered':
+        return 'success'
+      case 'shipping':
+        return 'processing'
+      case 'cancelled':
+        return 'error'
+      case 'pending':
+        return 'warning'
+      default:
+        return 'default'
+    }
+  }
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'delivered':
+        return <CheckCircleOutlined />
+      case 'shipping':
+        return <TruckOutlined />
+      case 'cancelled':
+        return <CloseCircleOutlined />
+      case 'pending':
+        return <ClockCircleOutlined />
+      default:
+        return null
+    }
+  }
+
+  const handleViewDetail = (order: any) => {
+    setSelectedOrder(order)
+    setDetailVisible(true)
+  }
+
   const columns = [
     {
       title: 'Mã đơn hàng',
       dataIndex: 'id',
       key: 'id',
-      render: (id: string) => <Link to={`/account/orders/${id}`}>{id}</Link>,
+      render: (id: string) => (
+        <Button
+          type="link"
+          onClick={() => handleViewDetail(orders.find(o => o.id === id))}
+        >
+          {id}
+        </Button>
+      ),
     },
     {
       title: 'Ngày đặt',
@@ -112,7 +468,7 @@ const Orders: React.FC = () => {
       key: 'date',
     },
     {
-      title: 'Số lượng',
+      title: 'Sản phẩm',
       dataIndex: 'items',
       key: 'items',
       render: (items: number) => `${items} sản phẩm`,
@@ -127,313 +483,779 @@ const Orders: React.FC = () => {
       title: 'Trạng thái',
       dataIndex: 'status',
       key: 'status',
-      render: (status: string) => {
-        let color = 'green'
-        if (status === 'Đang giao') {
-          color = 'blue'
-        } else if (status === 'Đã hủy') {
-          color = 'red'
-        }
-        return <Tag color={color}>{status}</Tag>
-      },
+      render: (status: string, record: any) => (
+        <Tag icon={getStatusIcon(status)} color={getStatusColor(status)}>
+          {record.statusText}
+        </Tag>
+      ),
     },
     {
       title: 'Thao tác',
       key: 'action',
       render: (_: any, record: any) => (
-        <Link to={`/account/orders/${record.id}`}>Xem chi tiết</Link>
+        <Space>
+          <Button
+            type="link"
+            icon={<EyeOutlined />}
+            onClick={() => handleViewDetail(record)}
+          >
+            Chi tiết
+          </Button>
+          {record.status === 'shipping' && (
+            <Button type="link" icon={<TruckOutlined />}>
+              Theo dõi
+            </Button>
+          )}
+          {record.status === 'delivered' && (
+            <Button type="link" icon={<SyncOutlined />}>
+              Mua lại
+            </Button>
+          )}
+        </Space>
       ),
     },
   ]
 
   return (
     <div>
-      <h2 className="text-xl font-bold mb-6">Đơn hàng của tôi</h2>
-      <div className="bg-white p-6 rounded-lg shadow-sm">
-        <Table columns={columns} dataSource={orders} rowKey="id" />
-      </div>
+      <Card>
+        <Tabs
+          activeKey={activeTab}
+          onChange={setActiveTab}
+          tabBarExtraContent={
+            <Button icon={<DownloadOutlined />}>Xuất Excel</Button>
+          }
+        >
+          {statusFilters.map(filter => (
+            <TabPane tab={filter.label} key={filter.key}>
+              <Table
+                columns={columns}
+                dataSource={orders.filter(
+                  o => filter.key === 'all' || o.status === filter.key
+                )}
+                rowKey="id"
+                pagination={{ pageSize: 10 }}
+              />
+            </TabPane>
+          ))}
+        </Tabs>
+      </Card>
+
+      {/* Order Detail Modal */}
+      <Modal
+        title={`Chi tiết đơn hàng ${selectedOrder?.id}`}
+        open={detailVisible}
+        onCancel={() => setDetailVisible(false)}
+        width={800}
+        footer={[
+          <Button key="print" icon={<PrinterOutlined />}>
+            In đơn hàng
+          </Button>,
+          <Button key="close" onClick={() => setDetailVisible(false)}>
+            Đóng
+          </Button>,
+        ]}
+      >
+        {selectedOrder && (
+          <div>
+            <Steps
+              current={
+                selectedOrder.status === 'delivered'
+                  ? 3
+                  : selectedOrder.status === 'shipping'
+                    ? 2
+                    : 1
+              }
+              className="mb-8"
+            >
+              <Step title="Đặt hàng" description={selectedOrder.date} />
+              <Step title="Xác nhận" description="01/05/2023" />
+              <Step title="Đang giao" description="02/05/2023" />
+              <Step title="Đã giao" description="03/05/2023" />
+            </Steps>
+
+            <Descriptions bordered column={{ xs: 1, sm: 2 }}>
+              <Descriptions.Item label="Mã đơn hàng">
+                {selectedOrder.id}
+              </Descriptions.Item>
+              <Descriptions.Item label="Ngày đặt">
+                {selectedOrder.date}
+              </Descriptions.Item>
+              <Descriptions.Item label="Trạng thái">
+                <Tag color={getStatusColor(selectedOrder.status)}>
+                  {selectedOrder.statusText}
+                </Tag>
+              </Descriptions.Item>
+              <Descriptions.Item label="Thanh toán">
+                {selectedOrder.payment}
+              </Descriptions.Item>
+              <Descriptions.Item label="Vận chuyển">
+                {selectedOrder.shipping}
+              </Descriptions.Item>
+              <Descriptions.Item label="Tổng tiền">
+                {formatPrice(selectedOrder.total)}
+              </Descriptions.Item>
+            </Descriptions>
+
+            <Divider>Sản phẩm</Divider>
+
+            <Table
+              dataSource={selectedOrder.products}
+              columns={[
+                { title: 'Sản phẩm', dataIndex: 'name', key: 'name' },
+                { title: 'Số lượng', dataIndex: 'quantity', key: 'quantity' },
+                {
+                  title: 'Đơn giá',
+                  dataIndex: 'price',
+                  key: 'price',
+                  render: formatPrice,
+                },
+                {
+                  title: 'Thành tiền',
+                  key: 'total',
+                  render: (_, record) =>
+                    formatPrice(record.price * record.quantity),
+                },
+              ]}
+              pagination={false}
+              rowKey="name"
+            />
+          </div>
+        )}
+      </Modal>
     </div>
   )
 }
 
-// Addresses component
+// Enhanced Addresses component
 const Addresses: React.FC = () => {
+  const [modalVisible, setModalVisible] = useState(false)
+  const [editingAddress, setEditingAddress] = useState<any>(null)
+  const [form] = Form.useForm()
+
   const addresses = [
     {
       id: 1,
       name: 'Nhà riêng',
-      address: '123 Đường ABC, Phường XYZ, Quận 1, TP. Hồ Chí Minh',
+      receiver: 'Nguyễn Văn A',
       phone: '0123456789',
+      address: '123 Đường ABC, Phường XYZ, Quận 1, TP. Hồ Chí Minh',
       isDefault: true,
+      type: 'home',
     },
     {
       id: 2,
       name: 'Văn phòng',
-      address: '456 Đường DEF, Phường UVW, Quận 2, TP. Hồ Chí Minh',
+      receiver: 'Nguyễn Văn A',
       phone: '0987654321',
+      address: '456 Đường DEF, Phường UVW, Quận 2, TP. Hồ Chí Minh',
       isDefault: false,
+      type: 'office',
     },
   ]
 
+  const handleAdd = () => {
+    setEditingAddress(null)
+    form.resetFields()
+    setModalVisible(true)
+  }
+
+  const handleEdit = (address: any) => {
+    setEditingAddress(address)
+    form.setFieldsValue(address)
+    setModalVisible(true)
+  }
+
+  const handleSave = (values: any) => {
+    console.log('Saving address:', values)
+    message.success(
+      editingAddress
+        ? 'Cập nhật địa chỉ thành công!'
+        : 'Thêm địa chỉ thành công!'
+    )
+    setModalVisible(false)
+  }
+
+  const handleDelete = (id: number) => {
+    Modal.confirm({
+      title: 'Xác nhận xóa địa chỉ',
+      content: 'Bạn có chắc chắn muốn xóa địa chỉ này?',
+      onOk: () => {
+        message.success('Xóa địa chỉ thành công!')
+      },
+    })
+  }
+
+  const getAddressIcon = (type: string) => {
+    switch (type) {
+      case 'home':
+        return <HomeOutlined />
+      case 'office':
+        return <ShopOutlined />
+      default:
+        return <EnvironmentOutlined />
+    }
+  }
+
   return (
     <div>
-      <h2 className="text-xl font-bold mb-6">Sổ địa chỉ</h2>
-      <div className="bg-white p-6 rounded-lg shadow-sm">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <Card
+        title="Sổ địa chỉ"
+        extra={
+          <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
+            Thêm địa chỉ mới
+          </Button>
+        }
+      >
+        <Row gutter={[16, 16]}>
           {addresses.map(address => (
-            <div
-              key={address.id}
-              className={`border ${
-                address.isDefault ? 'border-blue-500' : 'border-gray-200'
-              } p-4 rounded-lg`}
-            >
-              <div className="flex justify-between items-start mb-2">
-                <h3 className="font-medium">{address.name}</h3>
-                {address.isDefault && <Tag color="blue">Mặc định</Tag>}
-              </div>
-              <p className="text-gray-700">{address.address}</p>
-              <p className="text-gray-700">{address.phone}</p>
-              <div className="mt-4 flex space-x-2">
-                <Button type="default" size="small">
-                  Sửa
-                </Button>
-                {!address.isDefault && (
-                  <>
-                    <Button type="default" size="small">
-                      Đặt làm mặc định
-                    </Button>
-                    <Button type="default" danger size="small">
+            <Col xs={24} sm={12} key={address.id}>
+              <Card
+                className={`h-full ${address.isDefault ? 'border-blue-500' : ''}`}
+                actions={[
+                  <Button
+                    type="text"
+                    icon={<EditOutlined />}
+                    onClick={() => handleEdit(address)}
+                  >
+                    Sửa
+                  </Button>,
+                  !address.isDefault && (
+                    <Button
+                      type="text"
+                      danger
+                      icon={<DeleteOutlined />}
+                      onClick={() => handleDelete(address.id)}
+                    >
                       Xóa
                     </Button>
-                  </>
-                )}
-              </div>
-            </div>
+                  ),
+                  !address.isDefault && (
+                    <Button type="text" icon={<CheckCircleOutlined />}>
+                      Đặt mặc định
+                    </Button>
+                  ),
+                ].filter(Boolean)}
+              >
+                <Space direction="vertical" className="w-full">
+                  <Space>
+                    {getAddressIcon(address.type)}
+                    <Text strong>{address.name}</Text>
+                    {address.isDefault && <Tag color="blue">Mặc định</Tag>}
+                  </Space>
+                  <Text>{address.receiver}</Text>
+                  <Text type="secondary">{address.phone}</Text>
+                  <Paragraph className="mb-0">{address.address}</Paragraph>
+                </Space>
+              </Card>
+            </Col>
           ))}
-          <div className="border border-dashed border-gray-300 p-4 rounded-lg flex items-center justify-center">
-            <Button type="dashed" icon={<EnvironmentOutlined />}>
-              Thêm địa chỉ mới
-            </Button>
-          </div>
-        </div>
-      </div>
+          <Col xs={24} sm={12}>
+            <Card
+              className="h-full border-dashed cursor-pointer hover:border-blue-500 transition-colors"
+              onClick={handleAdd}
+            >
+              <div className="flex flex-col items-center justify-center h-full py-8">
+                <PlusCircleOutlined className="text-4xl text-gray-400 mb-4" />
+                <Text type="secondary">Thêm địa chỉ mới</Text>
+              </div>
+            </Card>
+          </Col>
+        </Row>
+      </Card>
+
+      {/* Address Form Modal */}
+      <Modal
+        title={editingAddress ? 'Sửa địa chỉ' : 'Thêm địa chỉ mới'}
+        open={modalVisible}
+        onCancel={() => setModalVisible(false)}
+        footer={null}
+        width={600}
+      >
+        <Form form={form} layout="vertical" onFinish={handleSave}>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                name="name"
+                label="Tên địa chỉ"
+                rules={[
+                  { required: true, message: 'Vui lòng nhập tên địa chỉ' },
+                ]}
+              >
+                <Input placeholder="VD: Nhà riêng, Văn phòng..." />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="type"
+                label="Loại địa chỉ"
+                rules={[
+                  { required: true, message: 'Vui lòng chọn loại địa chỉ' },
+                ]}
+              >
+                <Select placeholder="Chọn loại địa chỉ">
+                  <Option value="home">Nhà riêng</Option>
+                  <Option value="office">Văn phòng</Option>
+                  <Option value="other">Khác</Option>
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="receiver"
+                label="Người nhận"
+                rules={[
+                  { required: true, message: 'Vui lòng nhập tên người nhận' },
+                ]}
+              >
+                <Input prefix={<UserOutlined />} />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="phone"
+                label="Số điện thoại"
+                rules={[
+                  { required: true, message: 'Vui lòng nhập số điện thoại' },
+                  {
+                    pattern: /^[0-9]{10}$/,
+                    message: 'Số điện thoại không hợp lệ',
+                  },
+                ]}
+              >
+                <Input prefix={<PhoneOutlined />} />
+              </Form.Item>
+            </Col>
+            <Col span={24}>
+              <Form.Item
+                name="address"
+                label="Địa chỉ chi tiết"
+                rules={[{ required: true, message: 'Vui lòng nhập địa chỉ' }]}
+              >
+                <Input.TextArea
+                  rows={3}
+                  placeholder="Số nhà, tên đường, phường/xã, quận/huyện, tỉnh/thành phố"
+                />
+              </Form.Item>
+            </Col>
+            <Col span={24}>
+              <Form.Item name="isDefault" valuePropName="checked">
+                <Checkbox>Đặt làm địa chỉ mặc định</Checkbox>
+              </Form.Item>
+            </Col>
+          </Row>
+          <Form.Item className="mb-0 text-right">
+            <Space>
+              <Button onClick={() => setModalVisible(false)}>Hủy</Button>
+              <Button type="primary" htmlType="submit">
+                {editingAddress ? 'Cập nhật' : 'Thêm mới'}
+              </Button>
+            </Space>
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   )
 }
 
-// Wishlist component
+// Enhanced Wishlist component
 const Wishlist: React.FC = () => {
-  // Using the same data structure as the FeaturedProducts component
-  const products = [
+  const [products, setProducts] = useState([
     {
       id: 1,
-      name: 'Điện thoại thông minh ProMax',
-      price: 2999000,
-      originalPrice: 3499000,
-      image: 'phone.jpg',
+      name: 'iPhone 15 Pro Max 256GB',
+      price: 29990000,
+      originalPrice: 34990000,
+      image: '/api/placeholder/300/300',
       rating: 4.8,
+      reviews: 156,
+      stock: 10,
+      category: 'Điện thoại',
+      brand: 'Apple',
+    },
+    {
+      id: 2,
+      name: 'MacBook Air M2 13" 512GB',
+      price: 32990000,
+      originalPrice: 37990000,
+      image: '/api/placeholder/300/300',
+      rating: 4.9,
+      reviews: 89,
+      stock: 5,
+      category: 'Laptop',
+      brand: 'Apple',
     },
     {
       id: 3,
-      name: 'Laptop Gaming Supreme',
-      price: 5499000,
-      originalPrice: 6199000,
-      image: 'laptop.jpg',
+      name: 'Samsung Galaxy Watch 6 Classic',
+      price: 8990000,
+      originalPrice: 10990000,
+      image: '/api/placeholder/300/300',
       rating: 4.7,
+      reviews: 124,
+      stock: 3,
+      category: 'Đồng hồ',
+      brand: 'Samsung',
     },
-  ]
+  ])
 
-  // Format price to VND
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('vi-VN', {
       style: 'currency',
       currency: 'VND',
+      maximumFractionDigits: 0,
     }).format(price)
   }
 
-  return (
-    <div>
-      <h2 className="text-xl font-bold mb-6">Sản phẩm yêu thích</h2>
-      <div className="bg-white p-6 rounded-lg shadow-sm">
-        {products.length === 0 ? (
-          <div className="text-center py-8">
-            <HeartOutlined
-              style={{ fontSize: 48 }}
-              className="text-gray-300 mb-4"
-            />
-            <p className="text-gray-500">Bạn chưa có sản phẩm yêu thích nào</p>
-            <Link to="/products">
-              <Button type="primary" className="mt-4">
-                Khám phá sản phẩm
-              </Button>
-            </Link>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {products.map(product => (
-              <div
-                key={product.id}
-                className="bg-white rounded-lg border border-gray-100 p-4 flex flex-col relative"
-              >
-                <Button
-                  type="text"
-                  danger
-                  icon={<HeartOutlined />}
-                  className="absolute top-2 right-2"
-                />
-                <Link to={`/products/${product.id}`} className="block mb-4">
-                  <div className="bg-gray-100 h-40 rounded-md flex items-center justify-center mb-3">
-                    <span className="text-gray-400">Hình Sản Phẩm</span>
-                  </div>
-                </Link>
-                <div className="flex-grow">
-                  <Link to={`/products/${product.id}`} className="block">
-                    <h3 className="text-gray-800 font-medium mb-1 hover:text-blue-500">
-                      {product.name}
-                    </h3>
-                  </Link>
-                  <div className="flex items-center mb-3">
-                    <span className="text-blue-600 font-bold">
-                      {formatPrice(product.price)}
-                    </span>
-                    <span className="ml-2 text-gray-500 text-sm line-through">
-                      {formatPrice(product.originalPrice)}
-                    </span>
-                  </div>
-                </div>
-                <Button type="primary" block>
-                  Thêm vào giỏ
+  const handleRemove = (id: number) => {
+    Modal.confirm({
+      title: 'Xác nhận xóa',
+      content:
+        'Bạn có chắc chắn muốn xóa sản phẩm này khỏi danh sách yêu thích?',
+      onOk: () => {
+        setProducts(products.filter(p => p.id !== id))
+        message.success('Đã xóa khỏi danh sách yêu thích')
+      },
+    })
+  }
+
+  const handleAddToCart = (product: any) => {
+    message.success(`Đã thêm ${product.name} vào giỏ hàng`)
+  }
+
+  if (products.length === 0) {
+    return (
+      <Card>
+        <Empty
+          image={<HeartOutlined style={{ fontSize: 48, color: '#d9d9d9' }} />}
+          description={
+            <Space direction="vertical" align="center">
+              <Text>Bạn chưa có sản phẩm yêu thích nào</Text>
+              <Link to="/products">
+                <Button type="primary" icon={<ShoppingOutlined />}>
+                  Khám phá sản phẩm
                 </Button>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  )
-}
-
-// ChangePassword component
-const ChangePassword: React.FC = () => {
-  const [form] = Form.useForm()
-
-  const onFinish = (values: any) => {
-    console.log('Password changed:', values)
-    // Here would be the API call to change password
+              </Link>
+            </Space>
+          }
+        />
+      </Card>
+    )
   }
 
   return (
-    <div>
-      <h2 className="text-xl font-bold mb-6">Đổi mật khẩu</h2>
-      <div className="bg-white p-6 rounded-lg shadow-sm">
-        <Form
-          form={form}
-          layout="vertical"
-          onFinish={onFinish}
-          requiredMark={false}
-          className="max-w-md"
-        >
-          <Form.Item
-            name="currentPassword"
-            label="Mật khẩu hiện tại"
-            rules={[
-              { required: true, message: 'Vui lòng nhập mật khẩu hiện tại' },
-            ]}
-          >
-            <Input.Password placeholder="Nhập mật khẩu hiện tại" />
-          </Form.Item>
-          <Form.Item
-            name="newPassword"
-            label="Mật khẩu mới"
-            rules={[
-              { required: true, message: 'Vui lòng nhập mật khẩu mới' },
-              { min: 8, message: 'Mật khẩu phải có ít nhất 8 ký tự' },
-            ]}
-          >
-            <Input.Password placeholder="Nhập mật khẩu mới" />
-          </Form.Item>
-          <Form.Item
-            name="confirmPassword"
-            label="Xác nhận mật khẩu mới"
-            dependencies={['newPassword']}
-            rules={[
-              { required: true, message: 'Vui lòng xác nhận mật khẩu mới' },
-              ({ getFieldValue }) => ({
-                validator(_, value) {
-                  if (!value || getFieldValue('newPassword') === value) {
-                    return Promise.resolve()
-                  }
-                  return Promise.reject(
-                    new Error('Mật khẩu xác nhận không khớp!')
-                  )
-                },
-              }),
-            ]}
-          >
-            <Input.Password placeholder="Xác nhận mật khẩu mới" />
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Cập nhật mật khẩu
-            </Button>
-          </Form.Item>
-        </Form>
-      </div>
-    </div>
+    <Card
+      title="Sản phẩm yêu thích"
+      extra={<Text type="secondary">{products.length} sản phẩm</Text>}
+    >
+      <Row gutter={[16, 16]}>
+        {products.map(product => (
+          <Col xs={24} sm={12} md={8} key={product.id}>
+            <Card
+              hoverable
+              cover={
+                <img
+                  alt={product.name}
+                  src={product.image}
+                  className="h-48 object-cover"
+                />
+              }
+              actions={[
+                <Button
+                  type="text"
+                  danger
+                  icon={<HeartFilled />}
+                  onClick={() => handleRemove(product.id)}
+                >
+                  Bỏ thích
+                </Button>,
+                <Button
+                  type="text"
+                  icon={<ShoppingCartOutlined />}
+                  onClick={() => handleAddToCart(product)}
+                  disabled={product.stock === 0}
+                >
+                  {product.stock === 0 ? 'Hết hàng' : 'Thêm giỏ'}
+                </Button>,
+              ]}
+            >
+              <Space direction="vertical" className="w-full">
+                <Text strong className="line-clamp-2">
+                  {product.name}
+                </Text>
+                <Space>
+                  <Tag>{product.brand}</Tag>
+                  <Tag>{product.category}</Tag>
+                </Space>
+                <div>
+                  <Rate disabled value={product.rating} className="text-sm" />
+                  <Text type="secondary" className="ml-2">
+                    ({product.reviews})
+                  </Text>
+                </div>
+                <Space className="mt-2">
+                  <Text strong className="text-red-500 text-lg">
+                    {formatPrice(product.price)}
+                  </Text>
+                  <Text delete type="secondary">
+                    {formatPrice(product.originalPrice)}
+                  </Text>
+                </Space>
+                {product.stock <= 5 && product.stock > 0 && (
+                  <Tag color="warning" icon={<ExclamationCircleOutlined />}>
+                    Chỉ còn {product.stock} sản phẩm
+                  </Tag>
+                )}
+              </Space>
+            </Card>
+          </Col>
+        ))}
+      </Row>
+    </Card>
   )
 }
 
+// Enhanced ChangePassword component
+const ChangePassword: React.FC = () => {
+  const [form] = Form.useForm()
+  const [loading, setLoading] = useState(false)
+
+  const onFinish = async (values: any) => {
+    setLoading(true)
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1500))
+      message.success('Đổi mật khẩu thành công!')
+      form.resetFields()
+    } catch (error) {
+      message.error('Có lỗi xảy ra, vui lòng thử lại!')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const passwordRules = [
+    { required: true, message: 'Vui lòng nhập mật khẩu' },
+    { min: 8, message: 'Mật khẩu phải có ít nhất 8 ký tự' },
+    {
+      pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+      message: 'Mật khẩu phải có chữ hoa, chữ thường và số',
+    },
+  ]
+
+  return (
+    <Row gutter={24}>
+      <Col xs={24} lg={16}>
+        <Card title="Đổi mật khẩu">
+          <Form
+            form={form}
+            layout="vertical"
+            onFinish={onFinish}
+            autoComplete="off"
+          >
+            <Form.Item
+              name="currentPassword"
+              label="Mật khẩu hiện tại"
+              rules={[
+                { required: true, message: 'Vui lòng nhập mật khẩu hiện tại' },
+              ]}
+            >
+              <Input.Password
+                prefix={<LockOutlined />}
+                placeholder="Nhập mật khẩu hiện tại"
+                size="large"
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="newPassword"
+              label="Mật khẩu mới"
+              rules={passwordRules}
+            >
+              <Input.Password
+                prefix={<LockOutlined />}
+                placeholder="Nhập mật khẩu mới"
+                size="large"
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="confirmPassword"
+              label="Xác nhận mật khẩu mới"
+              dependencies={['newPassword']}
+              rules={[
+                { required: true, message: 'Vui lòng xác nhận mật khẩu mới' },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue('newPassword') === value) {
+                      return Promise.resolve()
+                    }
+                    return Promise.reject(
+                      new Error('Mật khẩu xác nhận không khớp!')
+                    )
+                  },
+                }),
+              ]}
+            >
+              <Input.Password
+                prefix={<LockOutlined />}
+                placeholder="Xác nhận mật khẩu mới"
+                size="large"
+              />
+            </Form.Item>
+
+            <Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+                loading={loading}
+                icon={<SafetyCertificateOutlined />}
+                size="large"
+              >
+                Cập nhật mật khẩu
+              </Button>
+            </Form.Item>
+          </Form>
+        </Card>
+      </Col>
+
+      <Col xs={24} lg={8}>
+        <Card title="Lưu ý bảo mật">
+          <Alert
+            message="Mật khẩu mạnh"
+            description={
+              <ul className="pl-4 mt-2">
+                <li>Ít nhất 8 ký tự</li>
+                <li>Bao gồm chữ hoa và chữ thường</li>
+                <li>Có ít nhất một số</li>
+                <li>Không nên dùng thông tin cá nhân</li>
+              </ul>
+            }
+            type="info"
+            showIcon
+            className="mb-4"
+          />
+
+          <Alert
+            message="Bảo vệ tài khoản"
+            description="Thay đổi mật khẩu định kỳ để bảo vệ tài khoản của bạn"
+            type="warning"
+            showIcon
+          />
+        </Card>
+      </Col>
+    </Row>
+  )
+}
+
+// Main Account component
 const Account: React.FC = () => {
   const location = useLocation()
+  const navigate = useNavigate()
   const [selectedKey, setSelectedKey] = useState('profile')
+  const screens = useBreakpoint()
 
   useEffect(() => {
     document.title = 'Tài khoản | Shop Của Bạn'
-    const path = location.pathname.split('/').pop() || 'profile'
-    setSelectedKey(path)
+    const path = location.pathname.split('/').pop()
+    if (path === 'account' || !path) {
+      setSelectedKey('profile')
+    } else {
+      setSelectedKey(path)
+    }
   }, [location])
 
   const menuItems = [
     {
       key: 'profile',
-      icon: <UserOutlined />,
+      icon: <UserOutlined style={{ fontSize: '18px' }} />,
       label: 'Thông tin tài khoản',
     },
     {
       key: 'orders',
-      icon: <ShoppingOutlined />,
+      icon: <ShoppingOutlined style={{ fontSize: '18px' }} />,
       label: 'Đơn hàng của tôi',
+      badge: 2,
     },
     {
       key: 'addresses',
-      icon: <EnvironmentOutlined />,
+      icon: <EnvironmentOutlined style={{ fontSize: '18px' }} />,
       label: 'Sổ địa chỉ',
     },
     {
       key: 'wishlist',
-      icon: <HeartOutlined />,
+      icon: <HeartOutlined style={{ fontSize: '18px' }} />,
       label: 'Sản phẩm yêu thích',
+      badge: 3,
     },
     {
       key: 'change-password',
-      icon: <LockOutlined />,
+      icon: <LockOutlined style={{ fontSize: '18px' }} />,
       label: 'Đổi mật khẩu',
     },
     {
+      key: 'notifications',
+      icon: <BellOutlined style={{ fontSize: '18px' }} />,
+      label: 'Thông báo',
+      badge: 5,
+    },
+    {
+      key: 'messages',
+      icon: <MessageOutlined style={{ fontSize: '18px' }} />,
+      label: 'Tin nhắn',
+      badge: 1,
+    },
+    {
+      key: 'rewards',
+      icon: <GiftOutlined style={{ fontSize: '18px' }} />,
+      label: 'Ưu đãi & Điểm thưởng',
+    },
+    {
+      key: 'settings',
+      icon: <SettingOutlined style={{ fontSize: '18px' }} />,
+      label: 'Cài đặt',
+    },
+    {
+      key: 'help',
+      icon: <QuestionCircleOutlined style={{ fontSize: '18px' }} />,
+      label: 'Trợ giúp',
+    },
+    {
       key: 'logout',
-      icon: <LogoutOutlined />,
+      icon: <LogoutOutlined style={{ fontSize: '18px' }} />,
       label: 'Đăng xuất',
       danger: true,
     },
   ]
 
-  const handleMenuClick = (e: any) => {
-    if (e.key === 'logout') {
-      // Handle logout logic
-      console.log('Logging out...')
+  const handleMenuClick = ({ key }: { key: string }) => {
+    if (key === 'logout') {
+      Modal.confirm({
+        title: 'Xác nhận đăng xuất',
+        content: 'Bạn có chắc chắn muốn đăng xuất?',
+        onOk: () => {
+          message.success('Đăng xuất thành công!')
+          navigate('/login')
+        },
+      })
     } else {
-      setSelectedKey(e.key)
+      setSelectedKey(key)
+      navigate(key === 'profile' ? '/account' : `/account/${key}`)
     }
+  }
+
+  const renderMenuItem = (item: any) => {
+    if (item.type === 'divider') {
+      return <Menu.Divider key={item.key} />
+    }
+
+    return (
+      <Menu.Item key={item.key} icon={item.icon} danger={item.danger}>
+        <Badge count={item.badge} offset={[10, 0]}>
+          {item.label}
+        </Badge>
+      </Menu.Item>
+    )
   }
 
   return (
@@ -441,6 +1263,7 @@ const Account: React.FC = () => {
       <Breadcrumb className="mb-6">
         <Breadcrumb.Item href="/">
           <HomeOutlined />
+          <span className="ml-2">Trang chủ</span>
         </Breadcrumb.Item>
         <Breadcrumb.Item>Tài khoản</Breadcrumb.Item>
         <Breadcrumb.Item>
@@ -448,34 +1271,64 @@ const Account: React.FC = () => {
         </Breadcrumb.Item>
       </Breadcrumb>
 
-      <h1 className="text-2xl font-bold mb-6">Tài khoản của tôi</h1>
+      <Row gutter={24}>
+        <Col xs={24} md={8} lg={6}>
+          <Card className="mb-6" bodyStyle={{ padding: '24px' }}>
+            <div className="text-center mb-6">
+              <Avatar
+                size={100}
+                icon={<UserOutlined />}
+                src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"
+                className="mb-4"
+              />
+              <Title level={4} className="mb-2">
+                Nguyễn Văn A
+              </Title>
+              <Tag color="gold" className="text-base px-3 py-1">
+                <StarOutlined /> VIP Member
+              </Tag>
+            </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="md:col-span-1">
-          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
             <Menu
-              mode="vertical"
+              mode="inline"
               selectedKeys={[selectedKey]}
               onClick={handleMenuClick}
-              style={{ width: '100%' }}
-              items={menuItems}
+              style={{ border: 'none' }}
+              items={menuItems.map(item => ({
+                ...item,
+                label: item.badge ? (
+                  <div className="flex items-center justify-between py-2">
+                    <span className="text-base">{item.label}</span>
+                    <Badge count={item.badge} />
+                  </div>
+                ) : (
+                  <span className="text-base py-2 block">{item.label}</span>
+                ),
+              }))}
+              className="ant-menu-item-selected-custom"
             />
-          </div>
-        </div>
-        <div className="md:col-span-3">
+          </Card>
+        </Col>
+
+        <Col xs={24} md={16} lg={18}>
           <Routes>
-            <Route
-              path="/"
-              element={<Navigate to="/account/profile" replace />}
-            />
+            <Route path="/" element={<Profile />} />
             <Route path="profile" element={<Profile />} />
             <Route path="orders" element={<Orders />} />
             <Route path="addresses" element={<Addresses />} />
             <Route path="wishlist" element={<Wishlist />} />
             <Route path="change-password" element={<ChangePassword />} />
+            <Route
+              path="notifications"
+              element={<div>Notifications Component</div>}
+            />
+            <Route path="messages" element={<div>Messages Component</div>} />
+            <Route path="rewards" element={<div>Rewards Component</div>} />
+            <Route path="settings" element={<div>Settings Component</div>} />
+            <Route path="help" element={<div>Help Component</div>} />
           </Routes>
-        </div>
-      </div>
+        </Col>
+      </Row>
     </div>
   )
 }

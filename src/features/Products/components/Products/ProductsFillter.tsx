@@ -1,34 +1,33 @@
-import React, { useEffect, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
 import {
+  AppstoreOutlined,
+  HomeOutlined,
+  ReloadOutlined,
+  ShopOutlined,
+  SortAscendingOutlined,
+  UnorderedListOutlined,
+} from '@ant-design/icons'
+import {
+  Alert,
+  Badge,
   Breadcrumb,
+  Button,
+  Card,
+  Checkbox,
+  Col,
+  Collapse,
+  Divider,
   Input,
+  Pagination,
+  Rate,
+  Row,
   Select,
   Slider,
-  Checkbox,
-  Button,
-  Pagination,
-  Card,
-  Typography,
-  Divider,
-  Row,
-  Col,
   Space,
-  Collapse,
   Tag,
-  Badge,
-  Alert,
-  Rate,
+  Typography,
 } from 'antd'
-import {
-  HomeOutlined,
-  FilterOutlined,
-  SortAscendingOutlined,
-  ShopOutlined,
-  AppstoreOutlined,
-  UnorderedListOutlined,
-  ReloadOutlined,
-} from '@ant-design/icons'
+import React, { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import Products from './Products'
 
 const { Search } = Input

@@ -13,14 +13,5 @@ const accountRouter: Routes = [
     showMenu: true,
     // icon,
   },
-  {
-    key: PageKey.Profile,
-    path: PagePath.Profile,
-    name: PageName.Profile,
-    component: lazy(() => import('@/pages/dashboard/ProfilePage')),
-    layout: LayoutCode.Public,
-    showMenu: true,
-    // icon,
-  },
 ]
 export default accountRouter
