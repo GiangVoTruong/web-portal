@@ -15,6 +15,7 @@ import {
   faGift,
 } from '@fortawesome/free-solid-svg-icons'
 import { PagePath } from '@/enums/pageEnum'
+import logo from '@/assets/Image/Logo.png'
 
 interface Notification {
   id: string
@@ -182,9 +183,11 @@ const PublicHeader: React.FC = () => {
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center">
-            <div className="bg-blue-500 text-white py-2 px-4 rounded font-bold text-xl">
-              LOGO
-            </div>
+            <img
+              src={logo}
+              alt="Logo"
+              className="h-12 w-auto object-contain md:h-14"
+            />
           </Link>
 
           {/* Mobile menu button */}

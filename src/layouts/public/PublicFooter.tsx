@@ -14,6 +14,7 @@ import {
   SendOutlined,
 } from '@ant-design/icons'
 import { PagePath } from '@/enums/pageEnum'
+import logo from '@/assets/Image/Logo.png'
 
 const PublicFooter: React.FC = () => {
   const currentYear = new Date().getFullYear()
@@ -55,7 +56,13 @@ const PublicFooter: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
           {/* Company Info */}
           <div className="lg:col-span-2">
-            <h3 className="text-2xl font-bold mb-6">LOGO</h3>
+            <h3 className="text-2xl font-bold mb-6">
+              <img
+                src={logo}
+                alt="Logo"
+                className="h-12 w-auto object-contain md:h-14"
+              />
+            </h3>
             <p className="text-gray-400 mb-6 max-w-md">
               Chúng tôi cam kết mang đến những sản phẩm công nghệ chính hãng với
               dịch vụ tốt nhất cho khách hàng.
